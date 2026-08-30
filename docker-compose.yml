@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: cashcard_family_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: cashcard_family
+      POSTGRES_USER: cashcard
+      POSTGRES_PASSWORD: cashcard
+    ports:
+      - "5433:5432"
+    volumes:
+      - cashcard_pg_data:/var/lib/postgresql/data
+
+volumes:
+  cashcard_pg_data:
