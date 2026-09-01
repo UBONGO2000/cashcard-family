@@ -1,0 +1,169 @@
+<main class="page">
+  <a class="back-link" routerLink="/cards">← Retour aux cartes</a>
+
+  @if (error()) {
+    <section class="board">
+      <p class="error">{{ error() }}</p>
+    </section>
+  }
+
+  @if (loading()) {
+    <p class="loading">Chargement...</p>
+  } @else if (card(); as currentCard) {
+    <section class="board">
+      <div class="detail-header">
+        <div [ngClass]="'cash-card big theme-' + (currentCard.id % 4)">
+          <div class="wave wave-1"></div>
+          <div class="wave wave-2"></div>
+
+          <div class="card-content">
+            <div class="card-identity">
+              <h3>{{ currentCard.name }}</h3>
+              <span class="card-label">Family Cash Card</span>
+            </div>
+
+            <span class="card-amount">
+              {{ currentCard.balance | currency:'EUR' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="detail-infos">
+          <span class="status-badge" [ngClass]="statusClass(currentCard.status)">
+            {{ statusLabel(currentCard.status) }}
+          </span>
+
+          <p class="info-line">
+            <span>Plafond</span>
+            <strong>{{ currentCard.spendingLimit | currency:'EUR' }}</strong>
+          </p>
+
+          <p class="info-line">
+            <span>Créée le</span>
+            <strong>{{ currentCard.createdAt | date:'dd/MM/yyyy' }}</strong>
+          </p>
+
+          <div class="actions">
+            @if (currentCard.status === 'ACTIVE') {
+              <button class="secondary-btn" (click)="blockCard()">
+                Bloquer
+              </button>
+            } @else if (currentCard.status === 'BLOCKED') {
+              <button class="primary-btn" (click)="unblockCard()">
+                Débloquer
+              </button>
+            }
+
+            <button class="danger-btn" (click)="closeCard()">
+              Fermer
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    @if (currentCard.status === 'ACTIVE') {
+      <section class="operations">
+        <div class="board operation-board">
+          <h2>Dépôt</h2>
+
+          <form (ngSubmit)="deposit()" class="form">
+            <label>
+              Montant
+              <input
+                type="number"
+                name="depositAmount"
+                step="0.01"
+                placeholder="0.00"
+                [(ngModel)]="depositForm.amount"
+                required
+              />
+            </label>
+
+            <label>
+              Raison
+              <input
+                type="text"
+                name="depositReason"
+                placeholder="Ex : Argent de poche"
+                [(ngModel)]="depositForm.reason"
+              />
+            </label>
+
+            <button type="submit" class="primary-btn">Déposer</button>
+          </form>
+        </div>
+
+        <div class="board operation-board">
+          <h2>Paiement</h2>
+
+          <form (ngSubmit)="pay()" class="form">
+            <label>
+              Montant
+              <input
+                type="number"
+                name="paymentAmount"
+                step="0.01"
+                placeholder="0.00"
+                [(ngModel)]="paymentForm.amount"
+                required
+              />
+            </label>
+
+            <label>
+              Marchand
+              <input
+                type="text"
+                name="paymentMerchant"
+                placeholder="Ex : Boulangerie"
+                [(ngModel)]="paymentForm.merchant"
+                required
+              />
+            </label>
+
+            <button type="submit" class="primary-btn">Payer</button>
+          </form>
+        </div>
+      </section>
+    }
+
+    <section class="board">
+      <h2 class="board-title">Historique</h2>
+
+      @if (transactionsLoading()) {
+        <p class="loading">Chargement des transactions...</p>
+      } @else {
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Statut</th>
+              <th>Montant</th>
+              <th>Solde après</th>
+              <th>Détail</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (transaction of transactions(); track transaction.id) {
+              <tr>
+                <td>{{ transaction.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ transaction.type }}</td>
+                <td>{{ transaction.status }}</td>
+                <td [class.negative]="transaction.amount < 0">
+                  {{ transaction.amount | currency:'EUR' }}
+                </td>
+                <td>{{ transaction.balanceAfter | currency:'EUR' }}</td>
+                <td>{{ transaction.merchant || transaction.reason || '-' }}</td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6">Aucune transaction</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </section>
+  }
+</main>

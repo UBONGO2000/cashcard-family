@@ -1,0 +1,108 @@
+<main class="page">
+  <section class="board">
+    <header class="board-header">
+      <h1>Votre famille</h1>
+
+      <button class="primary-btn" (click)="openCreateForm()">
+        Nouveau membre
+      </button>
+    </header>
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+      <p>Chargement...</p>
+    } @else {
+      <div class="cards-grid">
+        @for (card of cards(); track card.id; let i = $index) {
+          <div class="card-wrapper">
+            <button
+              class="add-btn"
+              [routerLink]="['/cards', card.id]"
+              title="Faire un dépôt"
+            >
+              +
+            </button>
+
+            <div [ngClass]="'cash-card theme-' + (i % 4)">
+              <div class="wave wave-1"></div>
+              <div class="wave wave-2"></div>
+
+              <div class="card-content">
+                <div class="card-identity">
+                  <h3>{{ card.name }}</h3>
+                  <span class="card-label">Family Cash Card</span>
+                </div>
+
+                <span class="card-amount">
+                  {{ card.balance | currency:'EUR' }}
+                </span>
+              </div>
+            </div>
+
+            <a class="edit-link" [routerLink]="['/cards', card.id]">
+              Éditer le membre
+            </a>
+          </div>
+        } @empty {
+          <p class="empty">Aucune carte trouvée.</p>
+        }
+      </div>
+    }
+  </section>
+
+  @if (showCreateForm()) {
+    <div class="overlay" (click)="closeCreateForm()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <h2>Ajouter un membre</h2>
+
+        <form (ngSubmit)="createCard()" class="form">
+          <label>
+            Nom du membre
+            <input
+              type="text"
+              name="name"
+              placeholder="Ex : Lucas"
+              [(ngModel)]="newCard.name"
+              required
+            />
+          </label>
+
+          <label>
+            Solde initial
+            <input
+              type="number"
+              name="initialBalance"
+              step="0.01"
+              placeholder="0.00"
+              [(ngModel)]="newCard.initialBalance"
+            />
+          </label>
+
+          <label>
+            Plafond
+            <input
+              type="number"
+              name="spendingLimit"
+              step="0.01"
+              placeholder="0.00"
+              [(ngModel)]="newCard.spendingLimit"
+            />
+          </label>
+
+          <div class="modal-actions">
+            <button type="button" class="secondary-btn" (click)="closeCreateForm()">
+              Annuler
+            </button>
+
+            <button type="submit" class="primary-btn">
+              Créer
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+</main>

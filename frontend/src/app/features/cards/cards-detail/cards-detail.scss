@@ -1,0 +1,149 @@
+.page {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.back-link {
+  color: var(--color-primary);
+  font-weight: 700;
+  text-decoration: none;
+  align-self: flex-start;
+}
+
+.detail-header {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+@media (max-width: 720px) {
+  .detail-header {
+    grid-template-columns: 1fr;
+  }
+}
+
+.detail-infos {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.status-badge {
+  align-self: flex-start;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 2px solid var(--color-ink);
+}
+
+.status-active {
+  background: #d9ead9;
+}
+
+.status-blocked {
+  background: #ffe1e1;
+}
+
+.status-closed {
+  background: #e2e2e2;
+}
+
+.info-line {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  border-bottom: 1px dashed #c9d4da;
+  padding-bottom: 0.5rem;
+}
+
+.info-line span {
+  color: var(--color-muted);
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.operations {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 720px) {
+  .operations {
+    grid-template-columns: 1fr;
+  }
+}
+
+.operation-board {
+  box-shadow: 10px 10px 0 var(--color-ink);
+}
+
+.operation-board h2,
+.board-title {
+  margin: 0 0 1.25rem;
+  font-size: 1.05rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.form input {
+  padding: 0.55rem;
+  border-radius: 8px;
+  border: 1px solid #c4ccd3;
+  background: #fff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.8rem 0.6rem;
+  border-bottom: 1px solid #e1e7eb;
+  font-size: 0.9rem;
+}
+
+th {
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.negative {
+  color: var(--color-danger);
+  font-weight: 700;
+}
+
+.error {
+  color: var(--color-danger);
+}
+
+.loading {
+  text-align: center;
+  color: var(--color-muted);
+}

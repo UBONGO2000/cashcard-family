@@ -1,0 +1,125 @@
+:root {
+  --color-bg: #dfe9ec;
+  --color-board: #fbfbfb;
+  --color-ink: #101418;
+  --color-primary: #1878d2;
+  --color-danger: #d32f2f;
+  --color-muted: #5f6b76;
+
+  --shadow-board: 18px 18px 0 var(--color-ink);
+  --shadow-card: 7px 7px 0 var(--color-ink);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-ink);
+}
+
+/* Panneaux blancs avec ombre décalée */
+.board {
+  background: var(--color-board);
+  border-radius: 10px;
+  box-shadow: var(--shadow-board);
+  padding: 2rem;
+}
+
+/* Boutons pill */
+.primary-btn,
+.secondary-btn,
+.danger-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 0.6rem 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+}
+
+.primary-btn {
+  background: var(--color-primary);
+}
+
+.secondary-btn {
+  background: #9aa0a6;
+}
+
+.danger-btn {
+  background: var(--color-danger);
+}
+
+/* Carte bancaire avec vagues */
+.cash-card {
+  position: relative;
+  border-radius: 18px;
+  border: 2px solid var(--color-ink);
+  box-shadow: var(--shadow-card);
+  background: #f7f7f7;
+  overflow: hidden;
+  padding: 1.25rem 1.5rem;
+  min-height: 180px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.cash-card.big {
+  min-height: 220px;
+}
+
+.wave {
+  position: absolute;
+  border-radius: 45% 55% 50% 50% / 55% 45% 55% 45%;
+}
+
+.wave-1 {
+  top: -55%;
+  left: -25%;
+  width: 150%;
+  height: 95%;
+  background: var(--wave-1);
+  opacity: 0.9;
+}
+
+.wave-2 {
+  bottom: -60%;
+  right: -30%;
+  width: 130%;
+  height: 100%;
+  background: var(--wave-2);
+  opacity: 0.9;
+}
+
+.theme-0 { --wave-1: #f2a099; --wave-2: #e4572e; }
+.theme-1 { --wave-1: #2e933c; --wave-2: #f8c33c; }
+.theme-2 { --wave-1: #f2a099; --wave-2: #f8c33c; }
+.theme-3 { --wave-1: #2e933c; --wave-2: #7ea8d8; }
+
+.card-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.card-identity h3 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.card-label {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.card-amount {
+  font-size: 1.4rem;
+  font-weight: 800;
+}
