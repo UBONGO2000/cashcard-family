@@ -1,0 +1,47 @@
+<main class="auth-page">
+  <div class="board auth-board">
+    <h1>Connexion</h1>
+    <p class="subtitle">Accédez à votre espace CashCard Family</p>
+
+    @if (error()) {
+      <div class="error-banner">{{ error() }}</div>
+    }
+
+    <form (ngSubmit)="submit()" class="form">
+      <label>
+        Email
+        <input
+          type="email"
+          name="email"
+          [(ngModel)]="form.email"
+          placeholder="parent@test.com"
+          required
+        />
+      </label>
+
+      <label>
+        Mot de passe
+        <input
+          type="password"
+          name="password"
+          [(ngModel)]="form.password"
+          placeholder="••••••••"
+          required
+        />
+      </label>
+
+      <button type="submit" class="primary-btn submit-btn" [disabled]="loading()">
+        @if (loading()) {
+          Connexion...
+        } @else {
+          Se connecter
+        }
+      </button>
+    </form>
+
+    <p class="footer-text">
+      Pas encore de compte ?
+      <a routerLink="/register">Créer un compte</a>
+    </p>
+  </div>
+</main>

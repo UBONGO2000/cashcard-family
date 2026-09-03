@@ -1,12 +1,19 @@
 <header class="app-header">
   <div class="app-header-content">
-    <h1 class="app-logo">{{ title() }}</h1>
+    <a routerLink="/cards" class="app-logo">
+      CashCard <span>Family</span>
+    </a>
 
-    <nav>
-      <a routerLink="/cards">
-        Cards
-      </a>
-    </nav>
+    @if (authService.currentUser(); as user) {
+      <div class="user-menu">
+        <span class="user-name">
+          {{ user.firstName }} {{ user.lastName }}
+        </span>
+        <button class="logout-btn" (click)="logout()">
+          Déconnexion
+        </button>
+      </div>
+    }
   </div>
 </header>
 

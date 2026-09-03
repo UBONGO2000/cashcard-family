@@ -15,11 +15,7 @@ import {
 })
 export class TransactionService {
   private readonly http = inject(HttpClient);
-
-  // TODO : à remplacer par l'utilisateur authentifié avec Spring Security plus tard
-  private readonly currentUserId = 1;
-
-  private readonly baseUrl = `/api/users/${this.currentUserId}/cards`;
+  private readonly baseUrl = '/api/cards';
 
   getTransactions(
     cardId: number,
