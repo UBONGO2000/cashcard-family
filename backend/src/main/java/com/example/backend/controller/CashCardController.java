@@ -1,9 +1,9 @@
 package com.example.backend.controller;
 
-
 import com.example.backend.dto.card.CashCardResponse;
 import com.example.backend.dto.card.CreateCashCardRequest;
 import com.example.backend.dto.card.UpdateCashCardRequest;
+import com.example.backend.security.CurrentUserService;
 import com.example.backend.service.CashCardService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -14,20 +14,21 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users/{userId}/cards")
+@RequestMapping("/api/cards")
 public class CashCardController {
 
     private final CashCardService cashCardService;
+    private final CurrentUserService currentUserService;
 
-    public CashCardController(CashCardService cashCardService) {
+    public CashCardController(CashCardService cashCardService, CurrentUserService currentUserService) {
         this.cashCardService = cashCardService;
+        this.currentUserService = currentUserService;
     }
 
     @PostMapping
-    public ResponseEntity<CashCardResponse> createCard(
-            @PathVariable Long userId,
-            @Valid @RequestBody CreateCashCardRequest request
-    ) {
+    public ResponseEntity<CashCardResponse> createCard(@Valid @RequestBody CreateCashCardRequest request) {
+        Long userId = currentUserService.getCurrentUserId();
+
         CashCardResponse response = cashCardService.createCard(userId, request);
 
         URI location = ServletUriComponentsBuilder
@@ -40,60 +41,47 @@ public class CashCardController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CashCardResponse>> getCards(@PathVariable Long userId) {
-        List<CashCardResponse> responses = cashCardService.getCardsByOwner(userId);
+    public ResponseEntity<List<CashCardResponse>> getCards() {
+        Long userId = currentUserService.getCurrentUserId();
 
-        return ResponseEntity.ok(responses);
+        return ResponseEntity.ok(cashCardService.getCardsByOwner(userId));
     }
 
     @GetMapping("/{cardId}")
-    public ResponseEntity<CashCardResponse> getCard(
-            @PathVariable Long userId,
-            @PathVariable Long cardId
-    ) {
-        CashCardResponse response = cashCardService.getCardByIdAndOwner(cardId, userId);
+    public ResponseEntity<CashCardResponse> getCard(@PathVariable Long cardId) {
+        Long userId = currentUserService.getCurrentUserId();
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(cashCardService.getCardByIdAndOwner(cardId, userId));
     }
 
     @PatchMapping("/{cardId}")
     public ResponseEntity<CashCardResponse> updateCard(
-            @PathVariable Long userId,
             @PathVariable Long cardId,
             @Valid @RequestBody UpdateCashCardRequest request
     ) {
-        CashCardResponse response = cashCardService.updateCard(cardId, userId, request);
+        Long userId = currentUserService.getCurrentUserId();
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(cashCardService.updateCard(cardId, userId, request));
     }
 
     @PostMapping("/{cardId}/block")
-    public ResponseEntity<CashCardResponse> blockCard(
-            @PathVariable Long userId,
-            @PathVariable Long cardId
-    ) {
-        CashCardResponse response = cashCardService.blockCard(cardId, userId);
+    public ResponseEntity<CashCardResponse> blockCard(@PathVariable Long cardId) {
+        Long userId = currentUserService.getCurrentUserId();
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(cashCardService.blockCard(cardId, userId));
     }
 
     @PostMapping("/{cardId}/unblock")
-    public ResponseEntity<CashCardResponse> unblockCard(
-            @PathVariable Long userId,
-            @PathVariable Long cardId
-    ) {
-        CashCardResponse response = cashCardService.unblockCard(cardId, userId);
+    public ResponseEntity<CashCardResponse> unblockCard(@PathVariable Long cardId) {
+        Long userId = currentUserService.getCurrentUserId();
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(cashCardService.unblockCard(cardId, userId));
     }
 
     @PostMapping("/{cardId}/close")
-    public ResponseEntity<CashCardResponse> closeCard(
-            @PathVariable Long userId,
-            @PathVariable Long cardId
-    ) {
-        CashCardResponse response = cashCardService.closeCard(cardId, userId);
+    public ResponseEntity<CashCardResponse> closeCard(@PathVariable Long cardId) {
+        Long userId = currentUserService.getCurrentUserId();
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(cashCardService.closeCard(cardId, userId));
     }
 }

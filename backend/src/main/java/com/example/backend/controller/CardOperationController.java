@@ -5,51 +5,54 @@ import com.example.backend.dto.transaction.DepositRequest;
 import com.example.backend.dto.transaction.OperationResponse;
 import com.example.backend.dto.transaction.PaymentRequest;
 import com.example.backend.dto.transaction.RefundRequest;
+import com.example.backend.security.CurrentUserService;
 import com.example.backend.service.CardOperationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users/{userId}/cards/{cardId}")
+@RequestMapping("/api/cards/{cardId}")
 public class CardOperationController {
 
     private final CardOperationService cardOperationService;
+    private final CurrentUserService currentUserService;
 
-    public CardOperationController(CardOperationService cardOperationService) {
+    public CardOperationController(
+            CardOperationService cardOperationService,
+            CurrentUserService currentUserService
+    ) {
         this.cardOperationService = cardOperationService;
+        this.currentUserService = currentUserService;
     }
 
     @PostMapping("/deposits")
     public ResponseEntity<OperationResponse> deposit(
-            @PathVariable Long userId,
             @PathVariable Long cardId,
             @Valid @RequestBody DepositRequest request
     ) {
-        OperationResponse response = cardOperationService.deposit(cardId, userId, request);
+        Long userId = currentUserService.getCurrentUserId();
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(cardOperationService.deposit(cardId, userId, request));
     }
 
     @PostMapping("/payments")
     public ResponseEntity<OperationResponse> pay(
-            @PathVariable Long userId,
             @PathVariable Long cardId,
             @Valid @RequestBody PaymentRequest request
     ) {
-        OperationResponse response = cardOperationService.pay(cardId, userId, request);
+        Long userId = currentUserService.getCurrentUserId();
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(cardOperationService.pay(cardId, userId, request));
     }
 
     @PostMapping("/refunds")
     public ResponseEntity<OperationResponse> refund(
-            @PathVariable Long userId,
             @PathVariable Long cardId,
             @Valid @RequestBody RefundRequest request
     ) {
-        OperationResponse response = cardOperationService.refund(cardId, userId, request);
+        Long userId = currentUserService.getCurrentUserId();
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(cardOperationService.refund(cardId, userId, request));
     }
 }
